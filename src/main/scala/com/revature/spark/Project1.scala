@@ -10,30 +10,50 @@ object Project1 {
     def scenario1(spark: SparkSession): Unit={
         println("\nScenario 1:");
         println("Total number of consumers for Branch 1: ")
-        spark.sql("Select sum(counts.count) as total from branches join counts on branches.drink = counts.drink where branches.branch = 'Branch1'").show();
+        spark.sql("select sum(counts.count) as total from branches join counts on branches.drink = counts.drink where branches.branch = 'Branch1'").show();
         println("\nTotal number of consumers for Branch 2: ")
-        spark.sql("Select sum(counts.count) as total from branches join counts on branches.drink = counts.drink where branches.branch = 'Branch2'").show();
+        spark.sql("select sum(counts.count) as total from branches join counts on branches.drink = counts.drink where branches.branch = 'Branch2'").show();
     }
 
 
     def scenario2(spark: SparkSession): Unit={
         println("\nScenario 2:");
         println("Most consumed beverage of Branch 1:")
-        spark.sql("Select branches.drink from branches join counts on branches.drink = counts.drink where branches.branch = 'Branch1' group by branches.drink order by sum(counts.count) desc limit 1").show();
+        spark.sql("select branches.drink, sum(counts.count) as total from branches join counts on branches.drink = counts.drink where branches.branch = 'Branch1' group by branches.drink order by sum(counts.count) desc limit 1").show();
         println("Most consumed beverage of Branch 2:")
-        spark.sql("Select branches.drink as total from branches join counts on branches.drink = counts.drink where branches.branch = 'Branch2' group by branches.drink order by sum(counts.count) asc limit 1").show();
-        println("Average consumed beverage of Branch 2:")
-        spark.sql("Select round(avg(total), 0) from (Select branches.drink, sum(counts.count) as total from branches join counts on branches.drink = counts.drink where branches.branch = 'Branch2' group by branches.drink) as sumbranch2").show();
+        spark.sql("select branches.drink, sum(counts.count) as total from branches join counts on branches.drink = counts.drink where branches.branch = 'Branch2' group by branches.drink order by sum(counts.count) asc limit 1").show();
+        println("Average of Branch 2 consumed beverages:")
+        spark.sql("select round(avg(total), 0) from (Select branches.drink, sum(counts.count) as total from branches join counts on branches.drink = counts.drink where branches.branch = 'Branch2' group by branches.drink) as sumbranch2").show();
     }
 
 
     def scenario3(spark: SparkSession): Unit={
-
+        println("\nScenario 3:")
+        println("Beverages available on Branch10, Branch8, and Branch1:");
+        spark.sql("select distinct drink from branches where branch = 'Branch10' or branch = 'Branch8' or branch = 'Branch1'").show();
+        println("Common beverages available in Branch4 and Branch7:");
+        spark.sql("select distinct drink from branches where branch = 'Branch4' intersect select distinct drink from branches where branch = 'Branch7'").show();
     }
 
 
     def scenario4(spark: SparkSession): Unit={
-
+        //Partition
+        println("Partition of Scenario 3, part 1:");
+        spark.sql("drop table if exists scenario4_t");
+        print("creating table similar to branches...")
+        spark.sql("create table scenario4_t like branches");
+        spark.sql("insert into scenario4_t select * from branches")
+        print("adding partition property to copied table...")
+        spark.sql("alter table scenario4_t add partition (branch String)")
+        print("Displaying Scenario 3 part 1 query on partitioned table...")
+        spark.sql("select distinct drink from branches where branch = 'Branch10' or branch = 'Branch8' or branch = 'Branch1'");
+        //View
+        println("View of Scenario 3, part 2:");
+        spark.sql("drop view if exists scenario4_v")
+        print("Creating view of Scenario 3 part 2...")
+        spark.sql("create view scenario4_v as (select distinct drink from branches where branch = 'Branch4' intersect select distinct drink from branches where branch = 'Branch7')");
+        print("Displaying view...")
+        spark.sql("select * from scenario4_v").show();
     }
 
 
