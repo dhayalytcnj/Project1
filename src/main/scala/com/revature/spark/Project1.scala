@@ -38,36 +38,52 @@ object Project1 {
 
     def scenario4(spark: SparkSession): Unit={
         //Partition
+        spark.conf.set("hive.exec.dynamic.partition.mode", "nonstrict");
         println("Partition of Scenario 3, part 1:");
+
         spark.sql("drop table if exists scenario4_t");
-        print("creating table similar to branches...")
-        spark.sql("create table scenario4_t like branches");
+
+        println("creating table scenario4_t similar to branches and adding partition on branch...")
+        spark.sql("create table scenario4_t(branch String, drink String) partitioned by (branch)");
         spark.sql("insert into scenario4_t select * from branches")
-        print("adding partition property to copied table...")
-        spark.sql("alter table scenario4_t add partition (branch String)")
-        print("Displaying Scenario 3 part 1 query on partitioned table...")
-        spark.sql("select distinct drink from branches where branch = 'Branch10' or branch = 'Branch8' or branch = 'Branch1'");
+
+        println("Table statistics on table scenario4_t:")
+        spark.sql("describe scenario4_t").show()
+
+        println("Displaying Scenario 3 part 1 query on partitioned table...")
+        spark.sql("select distinct drink from scenario4_t where branch = 'Branch10' or branch = 'Branch8' or branch = 'Branch1'").show();
+
         //View
-        println("View of Scenario 3, part 2:");
+        println("\nView of Scenario 3, part 2:");
+
         spark.sql("drop view if exists scenario4_v")
-        print("Creating view of Scenario 3 part 2...")
+
+        println("Creating view of Scenario 3 part 2...")
         spark.sql("create view scenario4_v as (select distinct drink from branches where branch = 'Branch4' intersect select distinct drink from branches where branch = 'Branch7')");
-        print("Displaying view...")
+
+        println("Table statistics on view:")
+        spark.sql("describe extended scenario4_v").show()
+
+        println("Displaying view...")
         spark.sql("select * from scenario4_v").show();
     }
 
 
     def scenario5(spark: SparkSession): Unit={
-
+        println("Inserting comment to scenario4 table...")
+        spark.sql("comment on table scenario4_t is 'This is my comment on the table'")
+        spark.sql("describe extended scenario4_t").show()
     }
 
 
     def scenario6(spark: SparkSession): Unit={
-
+        spark.sql("drop table if exists count2019");
+        spark.sql("drop table if exists count2020");
+        spark.sql("drop table if exists count2021");
     }
 
 //----------Main Statement
-    def main(args: Array[String]): Unit = {
+    def main(args: Array[String]): Unit={
         // create a spark session
         // for Windows
         System.setProperty("hadoop.home.dir", "C:\\winutils")
@@ -91,8 +107,7 @@ object Project1 {
         spark.sql("load data local inpath 'input/Bev_ConscountC.txt' into table counts");
 */
         println("---------------------------------------------");
-        println(s"\nWelcome to Yash's Proje1ct 1");
-        println("");
+        println(s"\nWelcome to Yash's Project 1");
 
         var menu_option:Int = 0;
         while (menu_option != 7) {
