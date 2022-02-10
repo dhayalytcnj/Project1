@@ -1,12 +1,3 @@
-Double_Coffee
-ICY_Lite
-SMALL_Espresso
-Cold_LATTE
-LARGE_Coffee
-Mild_cappuccino
-Triple_cappuccino
-Special_Espresso
-MED_cappuccino
 Double_cappuccino
 ICY_cappuccino
 SMALL_MOCHA
@@ -15,7 +6,6 @@ LARGE_cappuccino
 Mild_Coffee
 Triple_Coffee
 Special_MOCHA
-MED_Espresso
 Double_Espresso
 ICY_Coffee
 SMALL_LATTE
@@ -47,14 +37,3 @@ Double_Lite
 ICY_MOCHA
 SMALL_Coffee
 Cold_Espresso
-LARGE_Lite
-Mild_LATTE
-Triple_LATTE
-Special_Coffee
-MED_cappuccino
-Double_cappuccino
-ICY_LATTE
-SMALL_cappuccino
-Cold_MOCHA
-LARGE_cappuccino
-Mild_Lite
