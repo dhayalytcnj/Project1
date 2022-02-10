@@ -125,7 +125,7 @@ object Project1 {
         spark.sql("select cast((total_21.total + avg_growth.growth) as int) as potential_total_2022 from (select sum(count) as total from count2021) as total_21, avg_growth").show();
     }
 
-    
+
 //----------Main Statement
     def main(args: Array[String]): Unit={
         // create a spark session
