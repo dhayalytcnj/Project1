@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Thu Feb 10 13:07:56 EST 2022:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-017e-e4d2-0581-00000222a3d0 
+Thu Feb 10 16:18:41 EST 2022:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-017e-e580-a828-000001d0daa8 
 on database directory C:\Users\dhaya\Documents\GitHub\Project1\metastore_db with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@3764951d 
 Loaded from file:/C:/Users/dhaya/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/apache/derby/derby/10.12.1.1/derby-10.12.1.1.jar
 java.vendor=Oracle Corporation

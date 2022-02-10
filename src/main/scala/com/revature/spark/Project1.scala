@@ -53,7 +53,7 @@ object Project1 {
         spark.sql("insert into scenario4_t select * from branches")
 
         println("Table statistics on table scenario4_t:")
-        spark.sql("describe scenario4_t").show()
+        spark.sql("describe extended scenario4_t").show(50)
 
         println("Displaying Scenario 3 part 1 query on partitioned table...")
         spark.sql("select distinct drink from scenario4_t where branch = 'Branch10' or branch = 'Branch8' or branch = 'Branch1'").show();
@@ -67,7 +67,7 @@ object Project1 {
         spark.sql("create view scenario4_v as (select distinct drink from branches where branch = 'Branch4' intersect select distinct drink from branches where branch = 'Branch7')");
 
         println("Table statistics on view:")
-        spark.sql("describe extended scenario4_v").show()
+        spark.sql("describe extended scenario4_v").show(50)
 
         println("Displaying view...")
         spark.sql("select * from scenario4_v").show();
@@ -76,12 +76,13 @@ object Project1 {
 
     def scenario5(spark: SparkSession): Unit={
         println("Inserting comment to scenario4 table...")
-        spark.sql("comment on table scenario4_t is 'This is my comment on the table'")
-        spark.sql("describe extended scenario4_t").show()
+        spark.sql("comment on table scenario4_t is 'This is my comment on the table'");
+        spark.sql("describe extended scenario4_t").show(50);
 
-        //println("Inserting note to scenario4 table...")
-        //spark.sql("note on table scenario4_t is 'This is my note'")
-        //spark.sql("describe extended scenario4_t").show()
+        println("Inserting note to scenario4 table...")
+        spark.sql("alter table scenario4_t set tblproperties('notes' = 'This is my note')");
+        spark.sql("show tblproperties scenario4_t").show();
+
 
         println("Deleting all entries of MED_Espresso drink from Scenario4_t")
         spark.sql("insert overwrite table scenario4_t select * from scenario4_t where drink != 'MED_Espresso'")
@@ -124,6 +125,7 @@ object Project1 {
         spark.sql("select cast((total_21.total + avg_growth.growth) as int) as potential_total_2022 from (select sum(count) as total from count2021) as total_21, avg_growth").show();
     }
 
+    
 //----------Main Statement
     def main(args: Array[String]): Unit={
         // create a spark session
